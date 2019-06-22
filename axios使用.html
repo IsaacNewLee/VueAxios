@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>axios使用</title>
+</head>
+<body>
+<div id="app"></div>
+
+
+<script type="text/javascript" src="../vuestudy/node_modules/vue/dist/vue.js"></script>
+<script type="text/javascript" src="./node_modules/axios/dist/axios.js"></script>
+<script type="text/javascript">
+
+    let App = {
+        data() {
+            return {
+                msg: ""
+            }
+        },
+        template: `<div>
+
+                       <div>
+                            <button @click="sendAjaxGet">发送Get</button>
+                            <button @click="sendAjaxPost">发送Post</button>
+                            <h2 v-html="msg"></h2>
+                       </div>
+
+
+                   </div>`,
+        methods: {
+            sendAjaxGet() {
+                axios.get("http://127.0.0.1:5000/").then(res => {
+                    console.log(res.data);
+                    this.msg = res.data
+                }).catch(err => {
+                    console.log(err)
+                })
+            },
+            sendAjaxPost() {
+                // 传递{"name":"alex"}参数时需要使用URLSearchParams进行封装
+                var params = new URLSearchParams();
+                params.append("name", "alex");
+
+                axios.post("http://127.0.0.1:5000/create", params).then(res => {
+                    // 普通函数会将this指向改变成window，箭头函数不会，推荐使用箭头函数
+                    console.log(res.data)
+                }).catch(err => {
+                    console.log(err)
+                })
+
+            }
+
+        },
+
+
+    };
+
+    new Vue({
+        el: "#app",
+        template: `<App />`,
+        components: {
+            App
+        },
+    })
+</script>
+</body>
+</html>
